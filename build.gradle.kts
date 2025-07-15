@@ -5,8 +5,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-group = "org.allaymc.javaplugintemplate"
-description = "Java plugin template for allay server"
+group = "me.daoge.forcecape"
+description = "An allay plugin that force set player's cape"
 version = "0.1.0"
 
 java {
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "org.allaymc.allay", name = "api", version = "master-SNAPSHOT")
+    compileOnly(group = "org.allaymc.allay", name = "api", version = "0.6.0")
     compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.34")
 
     annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.34")
