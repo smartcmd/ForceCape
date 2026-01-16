@@ -1,6 +1,6 @@
 # ForceCape
 
-[![Allay](https://img.shields.io/badge/Allay-0.23.0--SNAPSHOT-blue)](https://github.com/AllayMC/Allay)
+[![Allay](https://img.shields.io/badge/Allay-0.22.0-blue)](https://github.com/AllayMC/Allay)
 [![Java](https://img.shields.io/badge/Java-21+-orange)](https://www.oracle.com/java/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
