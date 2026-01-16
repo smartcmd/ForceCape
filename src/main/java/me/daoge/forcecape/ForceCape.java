@@ -3,11 +3,10 @@ package me.daoge.forcecape;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
-import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
+import org.allaymc.api.player.Skin;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.server.Server;
-import org.cloudburstmc.protocol.bedrock.data.skin.ImageData;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,18 +34,44 @@ public final class ForceCape extends Plugin {
 
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event) {
-        var player = event.getPlayer();
+        var player = event.getPlayer().getControlledEntity();
         var skin = player.getSkin();
         var skinId = UUID.randomUUID().toString();
         var capeId = UUID.randomUUID().toString();
         var newSkin = skin.toBuilder()
-                .capeData(ImageData.from(capeImage))
+                .capeData(toImageData(capeImage))
                 .capeId(capeId)
                 .skinId(skinId)
-                .fullSkinId(skinId)
-                // TODO: waiting for https://github.com/CloudburstMC/Protocol/pull/292, missing fields in SerializedSkin.toBuilder() method
-                .geometryDataEngineVersion(ProtocolInfo.getMinecraftVersionStr())
+                .fullId(skinId)
                 .build();
         player.setSkin(newSkin);
+    }
+
+    private static Skin.ImageData toImageData(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        byte[] data = new byte[width * height * 4];
+
+        int index = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int argb = image.getRGB(x, y);
+
+                // ARGB in int
+                byte a = (byte) ((argb >> 24) & 0xFF);
+                byte r = (byte) ((argb >> 16) & 0xFF);
+                byte g = (byte) ((argb >> 8) & 0xFF);
+                byte b = (byte) (argb & 0xFF);
+
+                // RGBA order
+                data[index++] = r;
+                data[index++] = g;
+                data[index++] = b;
+                data[index++] = a;
+            }
+        }
+
+        return new Skin.ImageData(width, height, data);
     }
 }
